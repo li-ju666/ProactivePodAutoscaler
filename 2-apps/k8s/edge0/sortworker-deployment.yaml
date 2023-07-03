@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: sortworker0
+  labels: 
+    app: cpuint
+    tier: edge
+    role: worker
+    zone: "0"
+spec: 
+  # replicas: 2
+  selector: 
+    matchLabels: 
+      app: cpuint
+      tier: edge
+      role: worker
+      zone: "0"
+  strategy: 
+    type: Recreate
+  template: 
+    metadata: 
+      labels: 
+        app: cpuint
+        tier: edge
+        role: worker
+        zone: "0"
+    spec: 
+      containers: 
+        - image: liju666/cpuint_sort:latest
+          name: sortworker
+          env: 
+            - name: REDIS_HOST
+              value: edgeredis0
+            - name: EIG_SERVER
+              value: eigserver
+          resources: 
+            requests: 
+              memory: "512Mi"
+              cpu: "500m"
+            limits: 
+              memory: "1Gi"
+              cpu: "1000m"
+      nodeSelector: 
+        zone: "0"

@@ -1,0 +1,58 @@
+# kind: StorageClass
+# apiVersion: storage.k8s.io/v1
+# metadata: 
+#   name: cloudredis
+# provisioner: kubernetes.io/gce-pd
+# parameters: 
+#   type: pd-ssd
+
+# ---
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata: 
+#   name: cloudredis
+#   labels: 
+#     app: cpuint
+#     tier: cloud
+#     role: broker
+# spec: 
+#   selector: 
+#     matchLabels: 
+#       app: cpuint
+#       tier: cloud
+#       role: broker
+#   serviceName: cloudredis
+#   replicas: 1
+#   template: 
+#     metadata: 
+#       labels: 
+#         app: cpuint
+#         tier: cloud
+#         role: broker
+#     spec:
+#       containers: 
+#         - name: cloudredis
+#           image: redis
+#           volumeMounts: 
+#           - name: clouddata
+#             mountPath: /data
+#         - name: cloudflower
+#           image: mher/flower
+#           command: ["flower", "--broker=redis://cloudredis:6379/0", "--port=8888"]
+#           resources: 
+#             requests: 
+#               memory: "512Mi"
+#               cpu: "500m"
+#             limits: 
+#               memory: "1Gi"
+#               cpu: "1000m"
+#       nodeSelector: 
+#         centre: "true"
+#   volumeClaimTemplates: 
+#   - metadata: 
+#       name: clouddata
+#     spec: 
+#       accessModes: ["ReadWriteOnce"]
+#       resources: 
+#         requests: 
+#           storage: 1Gi

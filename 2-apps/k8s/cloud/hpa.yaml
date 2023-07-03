@@ -1,0 +1,12 @@
+# kind: HorizontalPodAutoscaler
+# apiVersion: autoscaling/v1
+# metadata: 
+#   name: cloudhpa
+# spec: 
+#   maxReplicas: 1
+#   minReplicas: 1
+#   scaleTargetRef: 
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: eigworker
+#   targetCPUUtilizationPercentage: 60

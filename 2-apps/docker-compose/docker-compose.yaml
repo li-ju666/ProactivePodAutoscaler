@@ -1,0 +1,47 @@
+version: '3.7'
+
+services: 
+  edgeredis:
+    image: redis 
+
+  cloudredis:
+    image: redis 
+
+  workersort: 
+    build: 
+      context: .
+      dockerfile: dockerfilesort
+    depends_on: 
+      - edgeredis
+    ports:
+      - 5000:5000
+    environment: 
+      - REDIS_HOST=edgeredis
+      - EIG_SERVER=workereigen
+
+  workereigen: 
+    build: 
+      context: .
+      dockerfile: dockerfileeigen
+    depends_on: 
+      - cloudredis
+    environment:
+      - REDIS_HOST=cloudredis
+
+  floweredge:
+    image: mher/flower
+    command: ["flower", "--broker=redis://edgeredis:6379/0", "--port=8888"]
+    depends_on:
+      - edgeredis
+      - workersort
+    ports: 
+      - 8888:8888
+
+  flowercloud:
+    image: mher/flower
+    command: ["flower", "--broker=redis://cloudredis:6379/0", "--port=8888"]
+    depends_on:
+      - cloudredis
+      - workereigen
+    ports: 
+      - 8889:8888

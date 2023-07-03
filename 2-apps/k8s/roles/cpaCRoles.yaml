@@ -1,0 +1,46 @@
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: ClusterRole
+# metadata:
+#   namespace: default
+#   name: cpa-ClusterRole
+# rules:
+# - apiGroups: [""] # "" indicates the core API group
+#   resources: ["events"]
+#   verbs: ["*"]
+
+# ---
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
+kind: ClusterRoleBinding
+metadata:
+  name: cpa-RCBinding
+subjects:
+- kind: ServiceAccount
+  name: edge0-autoscaler # Name is case sensitive
+  namespace: default
+  apiGroup: ""
+- kind: ServiceAccount
+  name: cloud-autoscaler
+  namespace: default
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: system:controller:horizontal-pod-autoscaler
+  apiGroup: rbac.authorization.k8s.io
+
+# ------------
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# # This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
+# kind: ClusterRoleBinding
+# metadata:
+#   name: cpa-operator-RCBinding
+# subjects:
+# - kind: ServiceAccount
+#   name: custom-pod-autoscaler-operator # Name is case sensitive
+#   namespace: default
+#   apiGroup: ""
+# roleRef:
+#   kind: ClusterRole
+#   name: system:controller:horizontal-pod-autoscaler
+#   apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: edgecexporter0
+  labels: 
+    app: cpuint
+    tier: edge
+    role: cexporter
+    zone: "0"
+spec: 
+  selector: 
+    matchLabels: 
+      app: cpuint
+      tier: edge
+      role: cexporter
+      zone: "0"
+  template: 
+    metadata: 
+      labels: 
+        app: cpuint
+        tier: edge
+        role: cexporter
+        zone: "0"
+    spec:
+      containers: 
+        - name: edgecexporter
+          image: ovalmoney/celery-exporter
+          command: ["celery-exporter"]
+          args: ["--broker-url", "redis://edgeredis0:6379/0", "-l", "0.0.0.0:9808", "--enable-events"]
+      nodeSelector: 
+        zone: "0"

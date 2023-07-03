@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: edge0request
+  labels: 
+    app: cpuint
+    tier: edge
+    role: request
+    zone: "0"
+spec:
+  replicas: 2
+  selector: 
+    matchLabels: 
+      app: cpuint
+      tier: edge
+      role: request
+      zone: "0"
+  template: 
+    metadata: 
+      labels: 
+        app: cpuint
+        tier: edge
+        role: request
+        zone: "0"
+    spec:
+      containers: 
+        - name: edge0request
+          image: liju666/cpu_request
+          # imagePullPolicy: Always
+      nodeSelector: 
+        zone: "0"

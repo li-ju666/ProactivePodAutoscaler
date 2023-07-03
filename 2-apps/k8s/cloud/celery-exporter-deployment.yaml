@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: cloudcexporter
+  labels: 
+    app: cpuint
+    tier: cloud
+    role: cexporter
+spec: 
+  selector: 
+    matchLabels: 
+      app: cpuint
+      tier: cloud
+      role: cexporter
+  template: 
+    metadata: 
+      labels: 
+        app: cpuint
+        tier: cloud
+        role: cexporter
+    spec:
+      containers: 
+        - name: cloudcexporter
+          image: ovalmoney/celery-exporter
+          command: ["celery-exporter"]
+          args: ["--broker-url", "redis://cloudredis:6379/0", "-l", "0.0.0.0:9808", "--enable-events"]
+      nodeSelector: 
+        centre: "true"

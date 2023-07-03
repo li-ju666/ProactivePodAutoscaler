@@ -1,0 +1,69 @@
+evaluate:
+  type: "shell"
+  timeout: 5000
+  shell:
+    entrypoint: "python"
+    command:
+      - "/evaluate.py"
+metric:
+  type: "shell"
+  timeout: 2500
+  shell:
+    entrypoint: "python"
+    command:
+      - "/metric.py"
+
+kubernetesMetricSpecs:
+  - type: Pods 
+    pods:
+      metric:
+        name: "cpu_usage" 
+      target:
+        type: AverageValue
+
+  - type: Pods
+    pods: 
+      metric: 
+        name: "kube_pod_container_resource_requests_cpu_cores"
+      target: 
+        type: AverageValue
+
+  - type: Pods 
+    pods:
+      metric:
+        name: "memory_working_set_bytes" 
+      target:
+        type: AverageValue
+
+  - type: Pods
+    pods: 
+      metric: 
+        name: "kube_pod_container_resource_requests_memory_bytes"
+      target: 
+        type: AverageValue
+
+  - type: Pods 
+    pods:
+      metric:
+        name: "network_receive_bytes" 
+      target:
+        type: AverageValue
+  - type: Pods 
+    pods:
+      metric:
+        name: "network_transmit_bytes" 
+      target:
+        type: AverageValue
+  - type: Object
+    object:
+      metric:
+        name: "celery_tasks_runtime_seconds_count"
+      describedObject:
+        apiVersion: v1
+        kind: Service
+        name: ${Exporter}
+      target:
+        type: Value
+requireKubernetesMetrics: true
+runMode: "per-resource"
+

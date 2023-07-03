@@ -1,0 +1,6 @@
+celery[redis]==4.4
+flower
+requests
+flask
+flask_restful
+numpy

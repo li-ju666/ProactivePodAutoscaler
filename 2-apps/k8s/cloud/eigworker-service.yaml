@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata: 
+    name: eigserver
+spec:
+    selector: 
+        app: cpuint
+        tier: cloud
+        role: worker
+    ports: 
+      - port: 5000
+        targetPort: 5000

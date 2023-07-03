@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: edgecexporter0
+  annotations:
+    alpha.monitoring.coreos.com/non-namespaced: "true"
+  labels: 
+    app: "cpuint"
+    tier: "edge"
+    zone: "0"
+    cexporter: "true"
+spec: 
+  ports:
+    - name: metrics
+      port: 9808
+      protocol: TCP
+  selector: 
+    app: cpuint
+    tier: edge
+    role: cexporter
+    zone: "0"
+
+---
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: cexportermonitor
+  labels:
+    app: "cpuint"
+    release: "prometheus-operator"
+spec:
+  jobLabel: cpuint
+  selector:
+    matchLabels:
+      cexporter: "true"
+  namespaceSelector:
+    matchNames:
+    - kube-system
+    - prometheus
+    - default
+  endpoints:
+  - port: metrics

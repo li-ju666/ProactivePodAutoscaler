@@ -1,0 +1,8 @@
+FROM python:3.6
+COPY requirements.txt /app/requirements.txt
+COPY projectsort /app/project
+WORKDIR /app/
+RUN pip3 install -r requirements.txt
+# COPY init.sh /app/init.sh
+# CMD celery -A project worker control enable_events & celery flower -A project --port=5555 & python3 -m project.run
+CMD celery -A project worker & python3 -m project.run

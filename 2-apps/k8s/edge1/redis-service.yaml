@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: edgeredis1
+  labels: 
+    app: cpuint
+    tier: edge
+    zone: "1"
+spec: 
+  ports: 
+    - port: 6379
+      targetPort: 6379
+  selector: 
+    app: cpuint
+    tier: edge
+    role: broker
+    zone: "1"
+  clusterIP: None

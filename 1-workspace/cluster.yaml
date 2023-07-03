@@ -1,0 +1,62 @@
+# system reserved should be customized for different machine
+# to fix allocatable resources
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+
+- role: worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "centre=true"
+        # system-reserved: memory=12Gi,cpu=14
+
+- role: worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "centre=true"
+        # system-reserved: memory=12Gi,cpu=14
+
+- role: worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "centre=false,zone=0"
+        # system-reserved: memory=15Gi,cpu=15
+
+- role: worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "centre=false,zone=0"
+        # system-reserved: memory=15Gi,cpu=15
+
+- role: worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "centre=false,zone=1"
+        # system-reserved: memory=15Gi,cpu=15
+
+- role: worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "centre=false,zone=1"
+        # system-reserved: memory=15Gi,cpu=15
+
+

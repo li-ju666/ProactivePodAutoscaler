@@ -1,0 +1,42 @@
+apiVersion: custompodautoscaler.com/v1
+kind: CustomPodAutoscaler
+metadata:
+  name: cloud-autoscaler
+  labels: 
+    app: cpuint
+    tier: cloud
+    role: cpa
+spec:
+  template:
+    metadata: 
+      labels: 
+        app: cpuint
+        tier: cloud
+        role: cpa
+    spec:
+      containers:
+      - name: python-custom-autoscaler
+        image: liju666/python-cpa:latest
+      nodeSelector: 
+        centre: "true"
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: eigworker
+  config:
+    - name: interval
+      value: "20000" # milliseconds
+    - name: minReplicas
+      value: "1"
+    - name: runMode
+      value: "per-resource"
+    - name: ScalerLink
+      value: "https://github.com/Li-Ju666/CustomModels/raw/master/keras/scaler"
+    - name: ModelLink
+      value: "https://github.com/Li-Ju666/CustomModels/raw/master/keras/model"
+    - name: ModelType
+      value: "keras"
+    - name: Threshold
+      value: "0.85"
+    - name: Exporter
+      value: "cloudcexporter"

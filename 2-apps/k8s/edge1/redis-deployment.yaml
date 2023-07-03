@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: edgeredis1
+  labels: 
+    app: cpuint
+    tier: edge
+    role: broker
+    zone: "1"
+spec: 
+  selector: 
+    matchLabels: 
+      app: cpuint
+      tier: edge
+      role: broker
+      zone: "1"
+  template: 
+    metadata: 
+      labels: 
+        app: cpuint
+        tier: edge
+        role: broker
+        zone: "1"
+    spec:
+      containers: 
+        - name: edgeredis
+          image: redis
+          resources: 
+            requests: 
+              memory: "512Mi"
+              cpu: "500m"
+            limits: 
+              memory: "1Gi"
+              cpu: "1000m"
+      nodeSelector: 
+        zone: "1"

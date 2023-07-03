@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: cloudredis
+  labels: 
+    app: cpuint
+    tier: cloud
+    role: broker
+spec: 
+  selector: 
+    matchLabels: 
+      app: cpuint
+      tier: cloud
+      role: broker
+  template: 
+    metadata: 
+      labels: 
+        app: cpuint
+        tier: cloud
+        role: broker
+    spec:
+      containers: 
+        - name: cloudredis
+          image: redis
+        # - name: cloudflower
+        #   image: mher/flower
+        #   command: ["flower", "--broker=redis://cloudredis:6379/0", "--port=8888"]
+          resources: 
+            requests: 
+              memory: "512Mi"
+              cpu: "500m"
+            limits: 
+              memory: "1Gi"
+              cpu: "1000m"
+      nodeSelector: 
+        centre: "true"
